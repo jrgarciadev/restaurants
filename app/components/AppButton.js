@@ -11,18 +11,19 @@ export default class AppButton extends Component {
 			<Button
 				onPress={action}
 				buttonStyle={{
+					marginBottom:5,
 					backgroundColor: bgColor,
-					height: 45,
+					// height: 45,
 					borderColor: "transparent",
 					borderWidth: 0,
 					borderRadius: 5,
-					width: width
+					// width: width
 				}}
 				icon= {
 					<Icon
 						name={iconName}
 						size={15}
-						iconColor={iconColor}
+						color={iconColor}
 					/>
 				}
 				title={title}
