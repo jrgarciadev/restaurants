@@ -25,7 +25,7 @@ const leftIcon = ({ navigation, icon }) => (
     style={{ marginLeft: 5 }}
     size={20}
     color="white"
-    onPress={() => navigation.navigate("DrawerOpen")}
+    onPress={() => navigation.toggleDrawer()}
   />
 );
 
@@ -50,7 +50,15 @@ const restaurantsScreenStack = createStackNavigator(
         drawerIcon: ({ tintColor }) => (
           <Icon name="home" size={24} style={{ color: tintColor }} />
         ),
-        headerLeft: leftIcon(navigation, "bars")
+        headerLeft: (
+          <Icon
+            color="white"
+            style={{ marginLeft: 20 }}
+            name="bars"
+            size={20}
+            onPress={() => navigation.toggleDrawer()}
+          />
+        )
       })
     }
   },
