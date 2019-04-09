@@ -3,6 +3,7 @@ import PreLoader from "../PreLoader";
 import { View, StyleSheet, FlatList } from "react-native";
 import { Card, Divider, Text } from "react-native-elements";
 import CommentEmpty from "./CommentEmpty";
+import Comment from "./Comment";
 import * as firebase from "firebase";
 
 class CommentList extends Component {
@@ -36,7 +37,7 @@ class CommentList extends Component {
   }
 
   renderComment(comment) {
-    return <Text>{comment.comment}</Text>;
+    return <Comment comment={comment} />;
   }
 
   render() {

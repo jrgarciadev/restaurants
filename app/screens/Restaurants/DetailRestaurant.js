@@ -13,9 +13,22 @@ class DetailRestaurant extends Component {
     };
   }
 
-  editRestaurant() {}
+  editRestaurant() {
+    const navigateAction = NavigationActions.navigate({
+      routeName: "EditRestaurant",
+      params: { restaurant: this.state.restaurant }
+    });
 
-  goHome() {}
+    this.props.navigation.dispatch(navigateAction);
+  }
+
+  goHome() {
+    const navigateAction = NavigationActions.navigate({
+      routeName: "ListRestaurants"
+    });
+
+    this.props.navigation.dispatch(navigateAction);
+  }
 
   render() {
     const { restaurant } = this.state;
