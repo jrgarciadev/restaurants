@@ -11,8 +11,10 @@
     "firebase": "^5.9.3",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native-action-button": "^2.8.5",
     "react-native-elements": "^1.1.0",
     "react-native-simple-toast": "^0.0.8",
+    "react-native-touchable-scale": "^2.0.0",
     "react-navigation": "^3.6.1",
     "react-simple-toast": "^1.0.10",
     "tcomb-form-native": "^0.6.20"

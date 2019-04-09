@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View } from "react-native";
+import { View, StatusBar } from "react-native";
 import AppButton from "../components/AppButton";
 import t from "tcomb-form-native";
 import FormValidation from "../utils/validation";
@@ -63,13 +63,14 @@ export default class Login extends Component {
   render() {
     return (
       <View>
+        <StatusBar barStyle="light-content" />
         <Card wrapperStyle={{ paddingLeft: 10 }} title="Inciar Sesión">
           <Form ref="form" type={this.user} options={this.options} />
           <AppButton
             bgColor="#F47B00"
             title="Login "
             action={this.login.bind(this)}
-            iconName="sign-in"
+            iconName="md-checkmark-circle-outline"
             iconSize={30}
             iconColor="#fff"
           />

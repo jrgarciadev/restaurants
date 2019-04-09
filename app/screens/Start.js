@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, StatusBar } from "react-native";
 import AppButton from "../components/AppButton";
 import { NavigationActions } from "react-navigation";
 import Toast from "react-native-simple-toast";
@@ -8,12 +8,13 @@ import * as firebase from "firebase";
 
 export default class Start extends Component {
   static navigationOptions = {
-    title: "JRFoods v1.0",
+    title: "JRFoods",
+    headerTintColor: "#353535",
+    headerStyle: {
+      backgroundColor: "#fff"
+    },
     headerTitleStyle: {
-      textAlign: "center",
-      alignSelf: "center",
-      fontWeight: "bold",
-      fontSize: 20
+      fontWeight: "bold"
     }
   };
 
@@ -63,11 +64,12 @@ export default class Start extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         <AppButton
           bgColor="#F47B00"
           title="Entrar "
           action={this.login.bind(this)}
-          iconName="sign-in"
+          iconName="md-arrow-forward"
           iconSize={30}
           iconColor="#fff"
         />
@@ -75,7 +77,7 @@ export default class Start extends Component {
           bgColor="#F47B00"
           title="Registrarme "
           action={this.register.bind(this)}
-          iconName="user-plus"
+          iconName="md-person-add"
           iconSize={30}
           iconColor="#fff"
         />
@@ -83,7 +85,7 @@ export default class Start extends Component {
           bgColor="#3b5998"
           title="Facebook "
           action={this.facebook.bind(this)}
-          iconName="facebook"
+          iconName="logo-facebook"
           iconSize={30}
           iconColor="#fff"
         />

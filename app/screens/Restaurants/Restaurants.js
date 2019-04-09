@@ -1,18 +1,19 @@
 import React, { Component } from "react";
 import PreLoader from "../../components/PreLoader";
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList, StatusBar } from "react-native";
 import { ListItem } from "react-native-elements";
 import * as firebase from "firebase";
 import { NavigationActions } from "react-navigation";
 import RestaurantEmpty from "../../components/Restaurant/RestaurantEmpty";
-import RestaurantAddButton from "../../components/Restaurant/RestaurantAddButton";
+import RestaurantButton from "../../components/Restaurant/RestaurantButton";
+import TouchableScale from "react-native-touchable-scale";
 
 export default class Restaurants extends Component {
   constructor() {
     super();
     this.state = {
       restaurants: [],
-      loaded: true,
+      loaded: false,
       restaurant_logo: require("../../../assets/images/restaurant.png")
     };
 
@@ -50,20 +51,36 @@ export default class Restaurants extends Component {
     this.props.navigation.dispatch(navigateAction);
   }
 
-  restaurantDetail(restaurant) {}
+  restaurantDetail(restaurant) {
+    const navigateAction = NavigationActions.navigate({
+      routeName: "DetailRestaurant",
+      params: { restaurant }
+    });
+
+    this.props.navigation.dispatch(navigateAction);
+  }
 
   renderRestaurant(restaurant) {
     return (
       <ListItem
         containerStyle={styles.item}
         titleStyle={styles.title}
+        Component={TouchableScale}
+        friction={90}
+        tension={100}
+        activeScale={0.95}
+        linearGradientProps={{
+          colors: ["#FF9800", "#F44336"],
+          start: [1, 0],
+          end: [0.2, 0]
+        }}
         roundAvatar
         title={`${restaurant.name} (Capacidad: ${restaurant.capacity})`}
-        avatar={this.state.restaurant_logo}
+        leftAvatar={{ source: this.state.restaurant_logo }}
         onPress={() => this.restaurantDetail(restaurant)}
-        rigthIcon={{
-          name: "arrow-right",
-          type: "font-awesome",
+        rightIcon={{
+          name: "arrow-forward",
+          type: "ion-icons",
           style: styles.listIconStyle
         }}
       />
@@ -79,6 +96,7 @@ export default class Restaurants extends Component {
     if (!restaurants.length) {
       return (
         <View style={{ flex: 1 }}>
+          <StatusBar backgroundColor="#fff" barStyle="dark-content" />
           <RestaurantEmpty text="No hay restaurantes disponibles" />
           <RestaurantAddButton addRestaurant={this.addRestaurant.bind(this)} />
         </View>
@@ -87,11 +105,12 @@ export default class Restaurants extends Component {
 
     return (
       <View style={{ flex: 1 }}>
+        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         <FlatList
           data={restaurants}
           renderItem={data => this.renderRestaurant(data.item)}
         />
-        <RestaurantAddButton addRestaurant={this.addRestaurant.bind(this)} />
+        <RestaurantButton action={this.addRestaurant.bind(this)} type="add" />
       </View>
     );
   }
@@ -107,7 +126,9 @@ const styles = StyleSheet.create({
     color: "#F47B00"
   },
   item: {
-    padding: 0,
+    borderRadius: 5,
+    margin: 10,
+    padding: 10,
     backgroundColor: "#FFB300"
   }
 });

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View } from "react-native";
+import { View, StatusBar } from "react-native";
 import AppButton from "../components/AppButton";
 import { Card } from "react-native-elements";
 import Toast from "react-native-simple-toast";
@@ -82,6 +82,7 @@ export default class Register extends Component {
   render() {
     return (
       <View>
+        <StatusBar barStyle="light-content" />
         <Card wrapperStyle={{ paddingLeft: 10 }} title="Registro">
           <Form
             ref="form"
@@ -94,7 +95,7 @@ export default class Register extends Component {
             bgColor="#F47B00"
             title="Registrarme "
             action={this.register.bind(this)}
-            iconName="user-plus"
+            iconName="md-person-add"
             iconSize={30}
             iconColor="#fff"
           />
