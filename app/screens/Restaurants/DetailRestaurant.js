@@ -3,6 +3,7 @@ import { ScrollView } from "react-native";
 import { NavigationActions } from "react-navigation";
 import Restaurant from "../../components/Restaurant/Restaurant";
 import CommentForm from "../../components/Comment/CommentForm";
+import CommentList from "../../components/Comment/CommentList";
 class DetailRestaurant extends Component {
   constructor(props) {
     super(props);
@@ -26,6 +27,7 @@ class DetailRestaurant extends Component {
           restaurant={restaurant}
         />
         <CommentForm restaurantId={restaurant.id} />
+        <CommentList restaurantId={restaurant.id} />
       </ScrollView>
     );
   }
