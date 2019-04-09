@@ -12,7 +12,7 @@ class CommentEmpty extends Component {
       <View style={styles.commentEmptyView}>
         <Text style={styles.commentEmptyText}>
           {" "}
-          No hay comentarios, ¡pueder ser el primero!
+          No hay comentarios, ¡puedes ser el primero!
         </Text>
       </View>
     );
