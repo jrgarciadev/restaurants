@@ -59,12 +59,10 @@ class CommentList extends Component {
       <View style={styles.container}>
         <Text style={styles.title}>Opiniones</Text>
         <Divider style={styles.divider} />
-        <Card>
-          <FlatList
-            data={comments}
-            renderItem={data => this.renderComment(data.item)}
-          />
-        </Card>
+        <FlatList
+          data={comments}
+          renderItem={data => this.renderComment(data.item)}
+        />
       </View>
     );
   }
