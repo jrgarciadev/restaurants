@@ -2,9 +2,8 @@ import React from "react";
 import {
   createStackNavigator,
   createAppContainer,
-  createDrawerNavigator
+  createBottomTabNavigator
 } from "react-navigation";
-import { DrawerNavigator, StackNavigator } from "react-navigation";
 import Icon from "react-native-vector-icons/Ionicons";
 import RestaurantsScreen from "../screens/Restaurants/Restaurants";
 import AddRestaurantScreen from "../screens/Restaurants/AddRestaurant";
@@ -12,6 +11,8 @@ import DetailRestaurantScreen from "../screens/Restaurants/DetailRestaurant";
 import EditRestaurantScreen from "../screens/Restaurants/EditRestaurant";
 import ProfileScreen from "../screens/Profile";
 import LogoutScreen from "../screens/Logout";
+import TabIcon from '../components/TabIcon';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const defaultNavigationOptions = {
   defaultNavigationOptions: {
@@ -24,52 +25,22 @@ const defaultNavigationOptions = {
     }
   }
 };
-const leftIcon = ({ navigation, icon }) => (
-  <Icon
-  name={icon}
-  style={{ marginLeft: 5 }}
-  size={20}
-  color="white"
-  onPress={() => navigation.toggleDrawer()}
-  />
-  );
-
-const rightIcon = ({ navigation, icon }) => {
-  return (
-    <Icon
-    name={icon}
-    style={{ marginLeft: 20 }}
-    size={20}
-    color="white"
-    onPress={() => navigation.navigate("ListRestaurants")}
-    />
-    );
-};
 
 const restaurantsScreenStack = createStackNavigator(
 {
   ListRestaurants: {
     screen: RestaurantsScreen,
-    navigationOptions: ({ navigation }) => ({
-      title: "Restaurantes",
-      drawerLabel: "Restaurantes",
-      drawerIcon: ({ tintColor }) => (
-        <Icon name="md-home" size={24} style={{ color: tintColor }} />
-        ),
-      headerLeft: (
-        <Icon
-        color="#353535"
-        style={{ marginLeft: 20 }}
-        name="md-menu"
-        size={20}
-        onPress={() => navigation.toggleDrawer()}
-        />
-        )
-    })
+    navigationOptions: {
+      title:'Restaurantes',
+      tabBarLabel: 'Restaurantes',
+      tabBarIcon: ({ tintColor }) => (<TabIcon name='md-person' size={25} color={tintColor} />)
+      
+    }
   },
   AddRestaurant: {
     screen: AddRestaurantScreen,
-    navigationOptions: ({ navigation }) => ({
+    navigationOptions: ({ navigation }) => (
+    {
       title: "Agregar restaurante",
       headerRight: (
         <Icon
@@ -78,15 +49,6 @@ const restaurantsScreenStack = createStackNavigator(
         name="md-home"
         size={20}
         onPress={() => navigation.navigate("ListRestaurants")}
-        />
-        ),
-      headerLeft: (
-        <Icon
-        color="#353535"
-        style={{ marginLeft: 20 }}
-        name="md-menu"
-        size={20}
-        onPress={() => navigation.toggleDrawer()}
         />
         )
     })
@@ -102,15 +64,6 @@ const restaurantsScreenStack = createStackNavigator(
         name="md-home"
         size={20}
         onPress={() => navigation.navigate("ListRestaurants")}
-        />
-        ),
-      headerLeft: (
-        <Icon
-        color="#353535"
-        style={{ marginLeft: 20 }}
-        name="md-menu"
-        size={20}
-        onPress={() => navigation.toggleDrawer()}
         />
         )
     })
@@ -139,27 +92,10 @@ const profileScreenStack = createStackNavigator(
 {
   ProfileScreen: {
     screen: ProfileScreen,
-    navigationOptions: ({ navigation }) => ({
+    navigationOptions: {
       title: "Perfil",
-      headerRight: (
-        <Icon
-        color="#353535"
-        style={{ marginRight: 20 }}
-        name="md-home"
-        size={20}
-        onPress={() => navigation.navigate("ListRestaurants")}
-        />
-        ),
-      headerLeft: (
-        <Icon
-        color="#353535"
-        style={{ marginLeft: 20 }}
-        name="md-menu"
-        size={20}
-        onPress={() => navigation.toggleDrawer()}
-        />
-        )
-    })
+      tabBarLabel: 'Perfil',
+    }
   }
 },
 defaultNavigationOptions
@@ -168,38 +104,47 @@ defaultNavigationOptions
 const logoutScreenStack = createStackNavigator({
   LogoutScreen: {
     screen: LogoutScreen,
-    navigationOptions: ({ navigation }) => ({
-      drawerLabel: "Cerrar Sesión",
-      drawerIcon: ({ tintColor }) => (
-        <Icon name="sign-out" size={24} style={{ color: tintColor }} />
-        )
-    })
+    navigationOptions: {
+      tabBarLabel: 'Cerrar Sesión',
+    }
   }
 });
 
-const loggedDrawerNavigation = createDrawerNavigator(
+
+const loggedBottomNavigation = createBottomTabNavigator(
 {
-  RestaurantScreen: {
+  Restaurants: {
     screen: restaurantsScreenStack
   },
-  ProfileScreen: {
+  Profile: {
     screen: profileScreenStack
   },
-  LogoutScreen: {
+  Logout: {
     screen: logoutScreenStack
   }
 },
 {
-  drawerBackgroundColor: "#fff",
-  contentOptions: {
-    activeTintColor: "#F47B00",
-    activeBackgroundColor: "transparent",
-    inactiveTintColor: "black",
-    itemsContainerStyle: {
-      marginVertical: 0
-    }
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, horizontal, tintColor }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        if (routeName === 'Restaurants') {
+          iconName = `md-home`;
+        } else if (routeName === 'Profile') {
+          iconName = `md-person`;
+        } else if (routeName === 'Logout') {
+          iconName = `md-log-out`;
+        }
+        return <TabIcon name={iconName} size={25} color={tintColor} />;
+      },
+    }),
+    tabBarOptions: {
+      activeTintColor: 'tomato',
+      inactiveTintColor: 'gray',
+      showLabel: false,
+      showIcon: true
+    },
   }
-}
 );
 
-export default createAppContainer(loggedDrawerNavigation);
+export default createAppContainer(loggedBottomNavigation);

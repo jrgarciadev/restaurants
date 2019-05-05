@@ -3,6 +3,7 @@ import { AsyncStorage, Text, View }  from 'react-native';
 import { Card, Input } from 'react-native-elements';
 import AppButton from '../components/AppButton';
 import Toast from 'react-native-simple-toast';
+import Icon from "react-native-vector-icons/Ionicons";
 
 class Profile extends Component {
 	constructor(props) {
@@ -83,30 +84,30 @@ class Profile extends Component {
 		const { user } = this.state;
 		return (
 			<View>
-				<Card>
-					<Input
-						placeholder="Nombre de usuario"
-						shake={true}
-						value={user.name}
-						onChangeText={(val) => this.updateName(val)}
-					/>
-					<Input
-						placeholder="Edad del usuario"
-						shake={true}
-						value={user.age}
-						onChangeText={(val) => this.updateAge(val)}
-					/>
-					<View style={{marginTop: 12}}>
-						<AppButton
-						bgColor="#F47B00"
-						title="Guardar en local "
-						action={this.save.bind(this)}
-						iconName="md-save"
-						iconSize={30}
-						iconColor="#fff"
-						/>
-					</View>
-				</Card>
+			<Card>
+			<Input
+			placeholder="Nombre de usuario"
+			shake={true}
+			value={user.name}
+			onChangeText={(val) => this.updateName(val)}
+			/>
+			<Input
+			placeholder="Edad del usuario"
+			shake={true}
+			value={user.age}
+			onChangeText={(val) => this.updateAge(val)}
+			/>
+			<View style={{marginTop: 12}}>
+			<AppButton
+			bgColor="#F47B00"
+			title="Guardar en local "
+			action={this.save.bind(this)}
+			iconName="md-save"
+			iconSize={30}
+			iconColor="#fff"
+			/>
+			</View>
+			</Card>
 			</View>
 			);
 	}
