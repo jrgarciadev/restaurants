@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import PreLoader from "../../components/PreLoader";
 import { View, StyleSheet, FlatList, StatusBar } from "react-native";
-import { ListItem } from "react-native-elements";
+import { ListItem, SearchBar } from "react-native-elements";
 import * as firebase from "firebase";
 import { NavigationActions } from "react-navigation";
 import RestaurantEmpty from "../../components/Restaurant/RestaurantEmpty";
 import RestaurantButton from "../../components/Restaurant/RestaurantButton";
 import TouchableScale from "react-native-touchable-scale";
-import Icon from "react-native-vector-icons/Ionicons";
 
 export default class Restaurants extends Component {
 
@@ -16,17 +15,24 @@ constructor() {
   this.state = {
     restaurants: [],
     loaded: false,
-    restaurant_logo: require("../../../assets/images/restaurant.png")
+    restaurant_logo: require("../../../assets/images/restaurant.png"),
+    search: ''
   };
-
-  this.refRestaurants = firebase
-  .database()
-  .ref()
-  .child("restaurants");
 }
 
 componentDidMount() {
-  this.refRestaurants.on("value", snapshot => {
+  const { search }  = this.state;
+
+  if (!search )  {
+    this.refRestaurants = firebase.database().ref().child('restaurants');
+  } else {
+    this.filterRestaurants(search);
+  }
+ this._loadFirebaseRestaurants();
+}
+
+_loadFirebaseRestaurants() {
+   this.refRestaurants.on("value", snapshot => {
     let restaurants = [];
     snapshot.forEach(row => {
       restaurants.push({
@@ -89,8 +95,47 @@ renderRestaurant(restaurant) {
     );
 }
 
+searchRestaurants( search ) {
+  this.setState({
+    search: search.charAt(0).toUpperCase() + search.slice(1)
+  });
+
+  if (search.name >= 3 )  {
+    this.filterRestaurants(search);
+    setTimeout(() => {
+      this._loadFirebaseRestaurants();
+    }, 200);
+  }
+}
+
+resetSearch() {
+  this.setState({
+    search: ''
+  });
+  this.refRestaurants = firebase.database().ref().child('restaurants');
+   setTimeout(() => {
+      this._loadFirebaseRestaurants();
+    }, 200);
+}
+
+filterRestaurants(search) {
+   this.refRestaurants = firebase.database().ref().child('restaurants')
+    .orderByChild('name')
+    .startAt(search)
+    .endAt(`${search}\uf8ff`);
+}
+
 render() {
   const { loaded, restaurants } = this.state;
+  const searchBar = (
+    <SearchBar
+        platform="android"
+        placeholder='Buscar Restaurante'
+        onChangeText={( text ) => this.searchRestaurants(text)}
+        onClear={this.resetSearch.bind(this)}
+        value={this.state.search}
+      />
+  )
   if (!loaded) {
     return <PreLoader />;
   }
@@ -99,6 +144,7 @@ render() {
     return (
       <View style={{ flex: 1 }}>
       <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+      { searchBar }
       <RestaurantEmpty text="No hay restaurantes disponibles" />
       <RestaurantAddButton addRestaurant={this.addRestaurant.bind(this)} />
       </View>
@@ -108,11 +154,12 @@ render() {
   return (
     <View style={{ flex: 1 }}>
     <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-    <FlatList
-    data={restaurants}
-    renderItem={data => this.renderRestaurant(data.item)}
-    keyExtractor={(data) => data.id}
-    />
+      { searchBar }
+      <FlatList
+      data={restaurants}
+      renderItem={data => this.renderRestaurant(data.item)}
+      keyExtractor={(data) => data.id}
+      />
     <RestaurantButton action={this.addRestaurant.bind(this)} type="add" />
     </View>
     );
