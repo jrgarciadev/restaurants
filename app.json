@@ -23,7 +23,11 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.jrgarciadev.jrfoods",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.jrgarciadev.jrfoods"
     }
   },
   "slug": "restaurants",
