@@ -20,36 +20,37 @@ constructor() {
   };
 }
 
-componentDidMount() {
-  const { search }  = this.state;
-
-  if (!search )  {
-    this.refRestaurants = firebase.database().ref().child('restaurants');
-  } else {
-    this.filterRestaurants(search);
+  componentDidMount () {
+    const {search} = this.state;
+    
+    if ( ! search) {
+      this.refRestaurants = firebase.database().ref().child('restaurants');
+    } else {
+      this._filterRestaurants(search);
+    }
+    
+    this._loadFirebaseRestaurants();
   }
- this._loadFirebaseRestaurants();
-}
 
-_loadFirebaseRestaurants() {
-   this.refRestaurants.on("value", snapshot => {
-    let restaurants = [];
-    snapshot.forEach(row => {
-      restaurants.push({
-        id: row.key,
-        name: row.val().name,
-        address: row.val().address,
-        capacity: row.val().capacity,
-        description: row.val().description
+  _loadFirebaseRestaurants () {
+    this.refRestaurants.on('value', snapshot => {
+      let restaurants = [];
+      snapshot.forEach(row => {
+        restaurants.push({
+          id: row.key,
+          name: row.val().name,
+          address: row.val().address,
+          capacity: row.val().capacity,
+          description: row.val().description
+        })
       });
-    });
 
-    this.setState({
-      restaurants,
-      loaded: true
-    });
-  });
-}
+      this.setState({
+        restaurants,
+        loaded: true
+      });
+    })
+  }
 
 addRestaurant() {
   const navigateAction = NavigationActions.navigate({
@@ -95,18 +96,18 @@ renderRestaurant(restaurant) {
     );
 }
 
-searchRestaurants( search ) {
-  this.setState({
-    search: search.charAt(0).toUpperCase() + search.slice(1)
-  });
-
-  if (search.name >= 3 )  {
-    this.filterRestaurants(search);
-    setTimeout(() => {
-      this._loadFirebaseRestaurants();
-    }, 200);
+  searchRestaurants (search) {
+    this.setState({
+      search: search.charAt(0).toUpperCase() + search.slice(1)
+    });
+    
+    if (search.length >= 3) {
+      this._filterRestaurants(search);
+      setTimeout(() => {
+        this._loadFirebaseRestaurants();
+      }, 1000);
+    }
   }
-}
 
 resetSearch() {
   this.setState({
@@ -115,18 +116,24 @@ resetSearch() {
   this.refRestaurants = firebase.database().ref().child('restaurants');
    setTimeout(() => {
       this._loadFirebaseRestaurants();
-    }, 200);
+    }, 1000);
 }
 
-filterRestaurants(search) {
-   this.refRestaurants = firebase.database().ref().child('restaurants')
-    .orderByChild('name')
-    .startAt(search)
-    .endAt(`${search}\uf8ff`);
-}
+  
+  _filterRestaurants (search) {
+    this.refRestaurants = firebase.database().ref().child('restaurants')
+        .orderByChild('name')
+        .startAt(search)
+        .endAt(`${search}\uf8ff`);
+  }
+
 
 render() {
   const { loaded, restaurants } = this.state;
+  if (!loaded) {
+    return <PreLoader />;
+  }
+
   const searchBar = (
     <SearchBar
         platform="android"
@@ -136,9 +143,6 @@ render() {
         value={this.state.search}
       />
   )
-  if (!loaded) {
-    return <PreLoader />;
-  }
 
   if (!restaurants.length) {
     return (
